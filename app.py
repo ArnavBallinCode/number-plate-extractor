@@ -82,4 +82,4 @@ if uploaded_file is not None:
     st.image(processed_image, caption="Processed Image", use_container_width=True)
 
 # Footer
-st.markdown("Developed by [Your Name](https://github.com/arnavballincode)")
+st.markdown("Developed by [Arnav Angarkar](https://github.com/arnavballincode)")

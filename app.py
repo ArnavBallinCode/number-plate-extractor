@@ -5,8 +5,8 @@ import numpy as np
 from PIL import Image
 import os
 
-# Set Tesseract executable path (adjust the path for your environment)
-pytesseract.pytesseract.tesseract_cmd = '/opt/homebrew/bin/tesseract'
+# Set Tesseract executable path (streamlit cloud should have this pre-installed)
+pytesseract.pytesseract.tesseract_cmd = '/usr/bin/tesseract'
 
 # Function to extract text from the number plate
 def extract_number_plate_text(image):
@@ -41,7 +41,7 @@ def extract_number_plate_text(image):
             break
     
     if screenCnt is None:
-        return "No number plate detected", None
+        return "No number plate detected"
     
     # Create a mask for the number plate
     mask = cv2.drawContours(np.zeros_like(gray), [screenCnt], -1, 255, -1)
@@ -68,19 +68,18 @@ uploaded_file = st.file_uploader("Upload an image of a number plate", type=["jpg
 if uploaded_file is not None:
     # Display the uploaded image
     image = Image.open(uploaded_file)
-    st.image(image, caption="Uploaded Image", use_column_width=True)
+    st.image(image, caption="Uploaded Image", use_container_width=True)
     
     # Extract number plate text
     with st.spinner("Processing..."):
         text, processed_image = extract_number_plate_text(image)
     
     # Display extracted text
-    if processed_image is not None:
-        st.success("Extraction Complete!")
-        st.write(f"**Extracted Text:** {text}")
-        st.image(processed_image, caption="Processed Image", use_column_width=True)
-    else:
-        st.error(text)
+    st.success("Extraction Complete!")
+    st.write(f"**Extracted Text:** {text}")
+    
+    # Display processed image
+    st.image(processed_image, caption="Processed Image", use_container_width=True)
 
 # Footer
-st.markdown("Developed by [Your Name](https://github.com/yourusername)")
+st.markdown("Developed by [Your Name](https://github.com/arnavballincode)")

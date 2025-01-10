@@ -5,7 +5,7 @@ import numpy as np
 from PIL import Image
 import os
 
-# Set Tesseract executable path (adjust if needed)
+# Set Tesseract executable path (adjust the path for your environment)
 pytesseract.pytesseract.tesseract_cmd = '/opt/homebrew/bin/tesseract'
 
 # Function to extract text from the number plate
@@ -41,7 +41,7 @@ def extract_number_plate_text(image):
             break
     
     if screenCnt is None:
-        return "No number plate detected"
+        return "No number plate detected", None
     
     # Create a mask for the number plate
     mask = cv2.drawContours(np.zeros_like(gray), [screenCnt], -1, 255, -1)
@@ -75,12 +75,12 @@ if uploaded_file is not None:
         text, processed_image = extract_number_plate_text(image)
     
     # Display extracted text
-    st.success("Extraction Complete!")
-    st.write(f"**Extracted Text:** {text}")
-    
-    # Display processed image
-    st.image(processed_image, caption="Processed Image", use_column_width=True)
+    if processed_image is not None:
+        st.success("Extraction Complete!")
+        st.write(f"**Extracted Text:** {text}")
+        st.image(processed_image, caption="Processed Image", use_column_width=True)
+    else:
+        st.error(text)
 
 # Footer
 st.markdown("Developed by [Your Name](https://github.com/yourusername)")
-
